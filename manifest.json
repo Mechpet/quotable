@@ -5,5 +5,11 @@
     "manifest_version": 3,
     "chrome_url_overrides": {
         "newtab" : "quote.html"
-    }
+    },
+    "action": {
+        "default_popup": "./popup.html"
+    },
+    "content_scripts": [{
+        "js": ["jquery-3.5.1.js", "popup.js"]
+    }]
 }
