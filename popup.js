@@ -1,6 +1,10 @@
 "use strict";
 
+function appendItem() {
+    $("ul").append("<li>Empty</li>");
+}
+
 // Run-time function
 $(function() {
-    console.log("Ran this fn")
+    $("button").click(appendItem)
 })

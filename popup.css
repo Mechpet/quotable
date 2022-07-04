@@ -3,10 +3,6 @@ html {
     height: 600px;
 }
 
-h1 {
-    height: 50px;
-}
-
 ul {
     padding-left: 0px;
     list-style-type: none;
@@ -34,6 +30,8 @@ li {
 li:hover {
     border-top: 1px solid black;
     border-bottom: 1px solid black;
+
+    text-decoration: line-through;
 }
 
 button {
@@ -54,4 +52,17 @@ button {
 button:hover {
     border-color: black;
     transition: 0.5s;
+}
+
+div.settings {
+    display: grid;
+    grid-template-columns: max-content max-content;
+}
+
+div.settings label {
+    text-align: right;
+}
+
+div.settings label:after {
+    content: ":";
 }
