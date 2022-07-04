@@ -10,6 +10,7 @@
         "default_popup": "./popup.html"
     },
     "content_scripts": [{
-        "js": ["jquery-3.5.1.js", "popup.js"]
+        "js": ["jquery-3.5.1.js", "popup.js"],
+        "matches": ["<all_urls>"]
     }]
 }

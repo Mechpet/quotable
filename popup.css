@@ -54,15 +54,8 @@ button:hover {
     transition: 0.5s;
 }
 
-div.settings {
-    display: grid;
-    grid-template-columns: max-content max-content;
-}
-
-div.settings label {
+label {
+    display: inline-block;
+    width: 50px;
     text-align: right;
-}
-
-div.settings label:after {
-    content: ":";
 }
