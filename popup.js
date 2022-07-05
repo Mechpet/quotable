@@ -2,12 +2,20 @@
 
 function appendItem(event) {
     event.preventDefault();
-    $("ul").append("<li>" + $("input[name = quote]").val() + "</li>");
+    var li = document.createElement("li");
+    li.innerHTML = "<li>" + $("input[name = quote]").val() + "</li>"
+
+
+    var ul = document.getElementsByTagName("ul")[0];
+    ul.appendChild(li.firstChild);
+    $("li").on("click", removeItem)
 }
 
 function removeItem(event) {
     //event.preventDefault();
-    $(this).parent().remove()
+    console.log("RMV")
+    var ul = document.getElementsByTagName("ul")[0];
+    ul.removeChild(this)
 }
 
 // Run-time function
