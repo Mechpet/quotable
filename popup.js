@@ -3,11 +3,21 @@
 const KEY_LEN = 32;
 const ALPHA_NUM = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-function appendItem(event) {
+function appendNewItem(event) {
     // Must prevent default event to have the change persist
     event.preventDefault();
 
-    var li = createNewQuote();
+    var li = createNewQuote($("input[name = quote").val(), $("input[name = author").val(), $("input[name = source").val());
+
+    var ul = document.getElementsByTagName("ul")[0];
+    ul.appendChild(li.firstChild);
+    // Attach click event back to all list items
+    $("li").on("click", removeItem);
+}
+
+function appendItem(keyObj) {
+    // Must prevent default event to have the change persist
+    var li = constructListItem(Object.keys(keyObj)[0], Object.values(keyObj)[0].quote);
 
     var ul = document.getElementsByTagName("ul")[0];
     ul.appendChild(li.firstChild);
@@ -41,21 +51,33 @@ function setIfEmpty(keyObj, ...args) {
 function pushVal(keyObj, ...args) {
     // args[0] : new value to push
     // Appends a value to the key-value pair (value is an array)
-    valueArray = keyObj.value;
+    var valueArray = Object.values(keyObj)[0];
     valueArray.push(args[0]);
-    setKeyValue(keyObj.key, valueArray);
+    setKeyValue(Object.keys(keyObj)[0], valueArray);
 }
 
-function createNewQuote() {
+function createNewQuote(quote, author, source) {
     // Generate a unique keyname
     var key = randomString(KEY_LEN, ALPHA_NUM);
     while (document.getElementById(key)) {
         key = randomString(KEY_LEN, ALPHA_NUM);
     }
 
+    var quoteData = {};
+    quoteData.quote = quote;
+    quoteData.author = author;
+    quoteData.source = source;
+
+    getKeyValue("keys", pushVal, key);
+    setKeyValue(key, quoteData);
+    return constructListItem(key, quote);
+}
+
+function constructListItem(key, quote) {
     var li = document.createElement("li");
-    li.innerHTML = "<li id = " + key + ">" + $("input[name = quote]").val() + "</li>";
-    return li
+    li.innerHTML = "<li id = " + key + ">" + quote + "</li>";
+
+    return li;
 }
 
 function setKeyValue(keyName, value) {
@@ -81,13 +103,27 @@ function randomString(length, chars) {
     return result;
 }
 
+function loadQuotes(keyObj, ...args) {
+    // Expects key "keys" in keyObj
+    for (const key of Object.values(keyObj)[0]) {
+        getKeyValue(key, appendItem);
+    }
+}
+
+function reset() {
+    chrome.storage.sync.clear(function() {
+        console.log("Cleared all keys.");
+    })
+}
+
 // Run-time function
 $(function() {
     // Initialize number of quotes to 0 if the setting does not exist
     getKeyValue("number", setIfEmpty, "number", 0);
-    getKeyValue("keys", setIfEmpty, "keys", []);
+    getKeyValue("keys", setIfEmpty, "keys", []);    
+    getKeyValue("keys", loadQuotes);
 
     // Attach event functions to the initial elements
-    $("button").click(appendItem);
+    $("button").click(appendNewItem);
     $("li").click(removeItem);
 })
