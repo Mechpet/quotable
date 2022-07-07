@@ -1,10 +1,13 @@
 "use strict";
 
+const KEY_LEN = 32;
+const ALPHA_NUM = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
 function appendItem(event) {
     // Must prevent default event to have the change persist
     event.preventDefault();
-    var li = document.createElement("li");
-    li.innerHTML = "<li>" + $("input[name = quote]").val() + "</li>";
+
+    var li = createNewQuote();
 
     var ul = document.getElementsByTagName("ul")[0];
     ul.appendChild(li.firstChild);
@@ -16,7 +19,7 @@ function appendItem(event) {
 function getKeyValue(keyName, callback, ...args) {
     chrome.storage.sync.get(keyName, function(keyObj) {
         // Spread arguments (split back to ...args of callback)
-        return callback(keyObj, ...args);
+        callback(keyObj, ...args);
     });
 }
 
@@ -33,6 +36,26 @@ function setIfEmpty(keyObj, ...args) {
     if (Object.keys(keyObj).length === 0) {
         setKeyValue(args[0], args[1]);
     }
+}
+
+function pushVal(keyObj, ...args) {
+    // args[0] : new value to push
+    // Appends a value to the key-value pair (value is an array)
+    valueArray = keyObj.value;
+    valueArray.push(args[0]);
+    setKeyValue(keyObj.key, valueArray);
+}
+
+function createNewQuote() {
+    // Generate a unique keyname
+    var key = randomString(KEY_LEN, ALPHA_NUM);
+    while (document.getElementById(key)) {
+        key = randomString(KEY_LEN, ALPHA_NUM);
+    }
+
+    var li = document.createElement("li");
+    li.innerHTML = "<li id = " + key + ">" + $("input[name = quote]").val() + "</li>";
+    return li
 }
 
 function setKeyValue(keyName, value) {
@@ -52,6 +75,12 @@ function rmvKeyValue(keyName) {
     });
 }
 
+function randomString(length, chars) {
+    var result = '';
+    for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+    return result;
+}
+
 // Run-time function
 $(function() {
     // Initialize number of quotes to 0 if the setting does not exist
@@ -61,5 +90,4 @@ $(function() {
     // Attach event functions to the initial elements
     $("button").click(appendItem);
     $("li").click(removeItem);
-    
 })
