@@ -25,35 +25,13 @@ function appendItem(keyObj) {
     $("li").on("click", removeItem);
 }
 
-/* Asynchonous method to get setting and set setting using closure from the caller getSaved() */
-function getKeyValue(keyName, callback, ...args) {
-    chrome.storage.sync.get(keyName, function(keyObj) {
-        // Spread arguments (split back to ...args of callback)
-        callback(keyObj, ...args);
-    });
-}
-
 function removeItem(event) {
     // Remove a list item (this) from the unordered list
     var ul = document.getElementsByTagName("ul")[0];
+    getKeyValue("keys", delValue, this.id);
     ul.removeChild(this);
-}
 
-function setIfEmpty(keyObj, ...args) {
-    // args[0] : key
-    // args[1] : value
-    // Initializes a key-value pair if it does not exist in Chrome storage
-    if (Object.keys(keyObj).length === 0) {
-        setKeyValue(args[0], args[1]);
-    }
-}
-
-function pushVal(keyObj, ...args) {
-    // args[0] : new value to push
-    // Appends a value to the key-value pair (value is an array)
-    var valueArray = Object.values(keyObj)[0];
-    valueArray.push(args[0]);
-    setKeyValue(Object.keys(keyObj)[0], valueArray);
+    getKeyValue("number", displaceValue, -1);
 }
 
 function createNewQuote(quote, author, source) {
@@ -70,31 +48,15 @@ function createNewQuote(quote, author, source) {
 
     getKeyValue("keys", pushVal, key);
     setKeyValue(key, quoteData);
+    getKeyValue("number", displaceValue, 1);
     return constructListItem(key, quote);
 }
 
 function constructListItem(key, quote) {
     var li = document.createElement("li");
     li.innerHTML = "<li id = " + key + ">" + quote + "</li>";
-
+    
     return li;
-}
-
-function setKeyValue(keyName, value) {
-    // Set a keyobject in Chrome storage
-    let keyObj;
-    keyObj = {};
-    keyObj[keyName] = value;
-    chrome.storage.sync.set(keyObj, function() {
-        console.log("Saved setting: ", keyObj);
-    });
-}
-
-function rmvKeyValue(keyName) {
-    // Remove a keyobject from Chrome storage (all attempts to get it will return `undefined`)
-    chrome.storage.sync.remove(keyName, function() {
-        console.log("Removed setting w/ key name: ", keyName);
-    });
 }
 
 function randomString(length, chars) {
@@ -105,15 +67,11 @@ function randomString(length, chars) {
 
 function loadQuotes(keyObj, ...args) {
     // Expects key "keys" in keyObj
-    for (const key of Object.values(keyObj)[0]) {
-        getKeyValue(key, appendItem);
+    if (Object.values(keyObj)[0]) {
+        for (const key of Object.values(keyObj)[0]) {
+            getKeyValue(key, appendItem);
+        }
     }
-}
-
-function reset() {
-    chrome.storage.sync.clear(function() {
-        console.log("Cleared all keys.");
-    })
 }
 
 // Run-time function
@@ -124,6 +82,7 @@ $(function() {
     getKeyValue("keys", loadQuotes);
 
     // Attach event functions to the initial elements
-    $("button").click(appendNewItem);
+    $("#adder").click(appendNewItem);
+    $("#reseter").click(reset);
     $("li").click(removeItem);
 })
