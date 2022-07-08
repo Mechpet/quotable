@@ -15,7 +15,9 @@ function selectQuote(keyObj, ...args) {
     console.log("keyoBJ OF SELECTQUOTE = ", keyObj);
     var key = Object.values(keyObj)[0][args[0]];
     console.log("key = ", key);
-    getKeyValue(key, setQuote);
+    if (key) {
+        getKeyValue(key, setQuote);
+    }
 }
 
 function setQuote(keyObj, ...args) {
