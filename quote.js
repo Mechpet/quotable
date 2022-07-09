@@ -25,9 +25,19 @@ function setQuote(keyObj, ...args) {
     console.log("quoteObj = ", quoteObj);
     $("title").html(quoteObj.quote);
     $("q").html(quoteObj.quote);
+    $("p").html(citation(quoteObj.author, quoteObj.source));
+}
+
+function citation(author, source) {
+    if (author && source) {
+        return `- ${author}, <i>${source}</i>`;
+    }
+    else {
+        return "";
+    }
 }
 
 $(function() {
-    console.log("SUP");
     getKeyValue("number", randomizeNumber);
+    fitToParent("#resize");
 })

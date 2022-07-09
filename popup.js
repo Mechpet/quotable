@@ -3,6 +3,7 @@
 const KEY_LEN = 32;
 const ALPHA_NUM = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+/* Appends a new list item (based on inputs) to the unordered list based on inputs & updates settings accordingly */
 function appendNewItem(event) {
     // Must prevent default event to have the change persist
     event.preventDefault();
@@ -15,6 +16,7 @@ function appendNewItem(event) {
     $("li").on("click", removeItem);
 }
 
+/* Appends a list item (based on keyobject) to the unordered list */
 function appendItem(keyObj) {
     // Must prevent default event to have the change persist
     var li = constructListItem(Object.keys(keyObj)[0], Object.values(keyObj)[0].quote);
@@ -25,8 +27,8 @@ function appendItem(keyObj) {
     $("li").on("click", removeItem);
 }
 
+/* Removes this list item permanently from the unordered list */
 function removeItem(event) {
-    // Remove a list item (this) from the unordered list
     var ul = document.getElementsByTagName("ul")[0];
     getKeyValue("keys", delValue, this.id);
     ul.removeChild(this);
@@ -34,6 +36,7 @@ function removeItem(event) {
     getKeyValue("number", displaceValue, -1);
 }
 
+/* Create a new quote object in Chrome storage - returns the linked list item */
 function createNewQuote(quote, author, source) {
     // Generate a unique keyname
     var key = randomString(KEY_LEN, ALPHA_NUM);
@@ -41,32 +44,39 @@ function createNewQuote(quote, author, source) {
         key = randomString(KEY_LEN, ALPHA_NUM);
     }
 
+    // Construct a quote object
     var quoteData = {};
     quoteData.quote = quote;
     quoteData.author = author;
     quoteData.source = source;
 
+    // Update settings
     getKeyValue("keys", pushVal, key);
     setKeyValue(key, quoteData);
     getKeyValue("number", displaceValue, 1);
     return constructListItem(key, quote);
 }
 
+/* Returns a list item linked to a quote object */
 function constructListItem(key, quote) {
     var li = document.createElement("li");
-    li.innerHTML = "<li id = " + key + ">" + quote + "</li>";
+    li.innerHTML = `<li id = ${key}>${quote}</li>`;
     
     return li;
 }
 
+/* Returns a random string based on arguments */
 function randomString(length, chars) {
-    var result = '';
-    for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+    var result = "";
+    for (var i = length; i > 0; --i) {
+        result += chars[Math.floor(Math.random() * chars.length)];
+    }
     return result;
 }
 
+/* Initialize the unordered list with list items persisting in Chrome storage */
 function loadQuotes(keyObj, ...args) {
-    // Expects key "keys" in keyObj
+    // Expects key "keys" in keyobject
     if (Object.values(keyObj)[0]) {
         for (const key of Object.values(keyObj)[0]) {
             getKeyValue(key, appendItem);

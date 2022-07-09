@@ -1,16 +1,6 @@
 "use strict";
 
-function appendItem(keyObj) {
-    // Must prevent default event to have the change persist
-    var li = constructListItem(Object.keys(keyObj)[0], Object.values(keyObj)[0].quote);
-
-    var ul = document.getElementsByTagName("ul")[0];
-    ul.appendChild(li.firstChild);
-    // Attach click event back to all list items
-    $("li").on("click", removeItem);
-}
-
-/* Asynchonous method to get setting and set setting using closure from the caller getSaved() */
+/* Asynchonous method to get keyobject and set it using closure from the caller */
 function getKeyValue(keyName, callback, ...args) {
     chrome.storage.sync.get(keyName, function(keyObj) {
         // Spread arguments (split back to ...args of callback)
@@ -18,25 +8,26 @@ function getKeyValue(keyName, callback, ...args) {
     });
 }
 
+
+/* Initializes a keyobject if it does not exist in Chrome storage */
 function setIfEmpty(keyObj, ...args) {
-    // args[0] : key
+    // args[0] : key name
     // args[1] : value
-    // Initializes a key-value pair if it does not exist in Chrome storage
     if (Object.keys(keyObj).length === 0) {
         setKeyValue(args[0], args[1]);
     }
 }
 
+/* Appends a value to the keyobject (value is an array) */
 function pushVal(keyObj, ...args) {
     // args[0] : new value to push
-    // Appends a value to the key-value pair (value is an array)
     var valueArray = Object.values(keyObj)[0];
     valueArray.push(args[0]);
     setKeyValue(Object.keys(keyObj)[0], valueArray);
 }
 
+/* Asynchronous method to set a keyobject in Chrome storage */
 function setKeyValue(keyName, value) {
-    // Set a keyobject in Chrome storage
     let keyObj;
     keyObj = {};
     keyObj[keyName] = value;
@@ -45,13 +36,14 @@ function setKeyValue(keyName, value) {
     });
 }
 
+/* Asynchronous method to remove a keyobject from Chrome storage (all consequent attempts to get it will return `undefined`) */
 function rmvKeyValue(keyName) {
-    // Remove a keyobject from Chrome storage (all attempts to get it will return `undefined`)
     chrome.storage.sync.remove(keyName, function() {
         console.log("Removed setting w/ key name: ", keyName);
     });
 }
 
+/* Updates a keyobject's value by displacing it */
 function displaceValue(keyObj, ...args) {
     // args[0] : displacement
     console.log("Old value = ", Object.values(keyObj)[0]);
@@ -60,8 +52,8 @@ function displaceValue(keyObj, ...args) {
     setKeyValue(Object.keys(keyObj)[0], newValue);
 }
 
+/* Deletes a specific value from a keyobject (expected value to be array-type) */
 function delValue(keyObj, ...args) {
-    // keyObj value : array type
     // args[0] : value to delete
     const valueArray = Object.values(keyObj)[0];
     const index = valueArray.indexOf(args[0]);
@@ -77,6 +69,7 @@ function delValue(keyObj, ...args) {
     setKeyValue(Object.keys(keyObj)[0], valueArray);
 }
 
+/* Asynchronous method to delete all keyobjects from Chrome storage */
 function reset() {
     chrome.storage.sync.clear(function() {
         console.log("Cleared all keys.");
