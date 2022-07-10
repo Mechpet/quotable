@@ -101,8 +101,10 @@ $(function() {
     getKeyValue("keys", setIfEmpty, "keys", []); 
     getKeyValue("theme", setIfEmpty, "theme", "default");   
 
+    // Initialize the appearance
     getKeyValue("keys", loadQuotes);
     getKeyValue("theme", loadOption);
+    $("select").select2();
 
     // Attach event functions to the initial elements
     $("#adder").click(appendNewItem);
