@@ -24,7 +24,8 @@ function setQuote(keyObj, ...args) {
     var quoteObj = Object.values(keyObj)[0];
     console.log("quoteObj = ", quoteObj);
     $("title").html(quoteObj.quote);
-    getKeyValue("theme", setTheme, quoteObj.quote);
+    $("q").html(quoteObj.quote)
+    getKeyValue("theme", setTheme);
     $("p").html(citation(quoteObj.author, quoteObj.source));
 }
 
@@ -37,7 +38,29 @@ function citation(author, source) {
     }
 }
 
+function setTheme(keyObj, ...args) {
+    console.log("Theme = ", Object.values(keyObj)[0]);
+    switch (Object.values(keyObj)[0]) {
+        case "shadow":
+            console.log("Yup");
+            $("q").css("color", "white");
+            $("p").css("color", "gray");
+            $("html").css("background-color", "black");
+            break;
+        case "enlighten":
+            $("q").css("color", "lemonchiffon");
+            $("p").css("color", "cornsilk");
+            $("html").css("background-color", "navajowhite");
+            break;
+        default:
+            console.log("hi");
+            $("q").css("color", "black");
+            $("p").css("color", "black");
+            $("html").css("background-color", "white");
+            break;
+    }
+}
+
 $(function() {
     getKeyValue("number", randomizeNumber);
-    fitToParent("#resize");
 })
