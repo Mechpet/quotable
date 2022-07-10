@@ -6,7 +6,7 @@ html {
 ul {
     padding-left: 0px;
     list-style-type: none;
-    min-height: 450px;
+    min-height: 425px;
     max-height: 450px;
 
     overflow: auto;
@@ -35,10 +35,21 @@ li:hover {
 }
 
 button {
+    width: 40px;
+    height: 50px;
+
     border-radius: 5px;
     border-width: 2px;
     border-color: transparent;
     background-color: white;
+
+    text-align: center;
+
+    margin: 0 auto;
+    display: table-cell;
+    vertical-align: middle;
+
+    padding: 0px;
 
     cursor: pointer;
 
@@ -46,9 +57,14 @@ button {
 }
 
 button#adder {
+    color: green;
     font-size: 40px;
-    width: 40px;
-    height: 50px;
+}
+
+button#reseter {
+    color: red;
+    font-size: 30px;
+    font-weight: 200;
 }
 
 button:hover {

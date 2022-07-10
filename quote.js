@@ -24,7 +24,7 @@ function setQuote(keyObj, ...args) {
     var quoteObj = Object.values(keyObj)[0];
     console.log("quoteObj = ", quoteObj);
     $("title").html(quoteObj.quote);
-    $("q").html(quoteObj.quote);
+    getKeyValue("theme", setTheme, quoteObj.quote);
     $("p").html(citation(quoteObj.author, quoteObj.source));
 }
 

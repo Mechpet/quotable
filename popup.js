@@ -84,15 +84,29 @@ function loadQuotes(keyObj, ...args) {
     }
 }
 
+function setTheme() {
+    let newTheme = this.value;
+    setKeyValue("theme", newTheme);
+}
+
+function loadOption(keyObj, ...args) {
+    console.log(Object.values(keyObj)[0]);
+    $(`select option[value = ${Object.values(keyObj)[0]}`).prop("selected", true);
+}
+
 // Run-time function
 $(function() {
     // Initialize number of quotes to 0 if the setting does not exist
     getKeyValue("number", setIfEmpty, "number", 0);
-    getKeyValue("keys", setIfEmpty, "keys", []);    
+    getKeyValue("keys", setIfEmpty, "keys", []); 
+    getKeyValue("theme", setIfEmpty, "theme", "default");   
+
     getKeyValue("keys", loadQuotes);
+    getKeyValue("theme", loadOption);
 
     // Attach event functions to the initial elements
     $("#adder").click(appendNewItem);
     $("#reseter").click(reset);
     $("li").click(removeItem);
+    $("select").change(setTheme);
 })
