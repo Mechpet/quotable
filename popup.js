@@ -10,6 +10,10 @@ function appendNewItem(event) {
 
     var li = createNewQuote($("input[name = quote").val(), $("input[name = author").val(), $("input[name = source").val());
 
+    if (!li) {
+        return;
+    }
+
     var ul = document.getElementsByTagName("ul")[0];
     ul.appendChild(li.firstChild);
     // Attach click event back to all list items
@@ -38,6 +42,9 @@ function removeItem(event) {
 
 /* Create a new quote object in Chrome storage - returns the linked list item */
 function createNewQuote(quote, author, source) {
+    if (!quote) {
+        return null;
+    }
     // Generate a unique keyname
     var key = randomString(KEY_LEN, ALPHA_NUM);
     while (document.getElementById(key)) {
@@ -86,12 +93,14 @@ function loadQuotes(keyObj, ...args) {
 
 function setTheme() {
     let newTheme = this.value;
+    console.log("Set theme to ", newTheme);
     setKeyValue("theme", newTheme);
 }
 
 function loadOption(keyObj, ...args) {
-    console.log(Object.values(keyObj)[0]);
-    $(`select option[value = ${Object.values(keyObj)[0]}`).prop("selected", true);
+    //$(`select option[value = ${Object.values(keyObj)[0]}`).prop("selected", true);
+    console.log("OPTION = ", Object.values(keyObj)[0]);
+    $("#theme").val(Object.values(keyObj)[0]).trigger("change.select2");
 }
 
 function formatState(state) {
@@ -113,7 +122,6 @@ $(function() {
 
     // Initialize the appearance
     getKeyValue("keys", loadQuotes);
-    getKeyValue("theme", loadOption);
     $(document).ready(function() {
         // Load select2 for the select item
         $("select").select2({
@@ -121,6 +129,8 @@ $(function() {
             templateResult: formatState
         });
     });
+    getKeyValue("theme", loadOption);
+
 
     // Attach event functions to the initial elements
     $("#adder").click(appendNewItem);
