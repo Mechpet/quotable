@@ -25,26 +25,38 @@ function setQuote(keyObj, ...args) {
     console.log("quoteObj = ", quoteObj);
     $("title").html(quoteObj.quote);
     $("q").html(quoteObj.quote)
+    var citationArr = citation(quoteObj.author, quoteObj.source);
+    $("p").html(citationArr[0]);
+    $("i").html(citationArr[1]);
     getKeyValue("theme", setTheme);
-    $("p").html(citation(quoteObj.author, quoteObj.source));
 }
 
 function citation(author, source) {
-    if (author && source) {
-        return `- ${author}, <i>${source}</i>`;
+    var retArr = [];
+    if (author) {
+        retArr.push(`- ${author},`);
     }
     else {
-        return "";
+        retArr.push("");
     }
+
+    if (source) {
+        retArr.push(`${source}`);
+    }
+    else {
+        retArr.push("");
+    }
+
+    return retArr;
 }
 
 function setTheme(keyObj, ...args) {
     console.log("Theme = ", Object.values(keyObj)[0]);
     switch (Object.values(keyObj)[0]) {
         case "shadow":
-            console.log("Yup");
             $("q").css("color", "white");
             $("p").css("color", "gray");
+            $("i").css("color", "gray");
             $("html").css("background-color", "black");
             break;
         case "enlighten":
@@ -59,6 +71,7 @@ function setTheme(keyObj, ...args) {
             $("html").css("background-color", "white");
             break;
     }
+    $("*").css("transition", "all 0.5s");
 }
 
 $(function() {
