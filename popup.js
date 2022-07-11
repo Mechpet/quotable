@@ -104,7 +104,11 @@ $(function() {
     // Initialize the appearance
     getKeyValue("keys", loadQuotes);
     getKeyValue("theme", loadOption);
-    $("select").select2();
+    $(document).ready(function() {
+        $("select").select2({
+            dropdownParent: $("form")[0]
+        });
+    });
 
     // Attach event functions to the initial elements
     $("#adder").click(appendNewItem);
