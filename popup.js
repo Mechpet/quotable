@@ -94,6 +94,16 @@ function loadOption(keyObj, ...args) {
     $(`select option[value = ${Object.values(keyObj)[0]}`).prop("selected", true);
 }
 
+function formatState(state) {
+    if (!state.id) {
+        return state.text;
+    }
+
+    return $(
+        `<div style = "${$(state.element).data("style")}">${state.text}</div>`
+    );
+}
+
 // Run-time function
 $(function() {
     // Initialize number of quotes to 0 if the setting does not exist
@@ -105,8 +115,10 @@ $(function() {
     getKeyValue("keys", loadQuotes);
     getKeyValue("theme", loadOption);
     $(document).ready(function() {
+        // Load select2 for the select item
         $("select").select2({
-            dropdownParent: $("form")[0]
+            dropdownParent: $("form")[0],
+            templateResult: formatState
         });
     });
 
