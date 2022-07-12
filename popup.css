@@ -77,25 +77,3 @@ label {
     width: 50px;
     text-align: right;
 }
-
-select {
-    display: inline-block;
-}
-
-/* Get rid of whitespace padding to make background-color fill the entire item */
-.select2-results__option { 
-    padding: 0px !important;
-}
-
-.select2-results__option div { 
-    padding: 5px; 
-    text-decoration: underline;
-}
-
-/* Override blue highlight on selected item - instead, bold and italicize the item */
-.select2-results__option--highlighted {
-    background-color: transparent !important;
-    color: transparent !important;
-    font-weight: bold;
-    font-style: italic;
-}

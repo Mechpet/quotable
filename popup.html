@@ -4,11 +4,12 @@
         <link rel = "stylesheet" href = "jquery-3.5.1.js">
         <link rel = "stylesheet" href = "select2.min.css">
         <link rel = "stylesheet" href = "popup.css">
+        <link rel = "stylesheet" href = "themes.css">
         <script type = "text/javascript" src = "jquery-3.5.1.js"></script>
         <script type = "text/javascript" src = "keyObj.js"></script>
         <script type = "text/javascript" src = "select2.min.js"></script>
-        <script type = "text/javascript" src = "themes.js"></script>
         <script type = "text/javascript" src = "popup.js"></script>
+        <script type = "text/javascript" src = "themes.js"></script>
     </head>
 
     <body>
@@ -28,13 +29,9 @@
             <button id = "adder" title = "Add quote based on current inputs." type = "submit">+</button>
             <button id = "reseter" title = "Delete all current quotes.">X</button>
             <label for = "theme">Theme:</label>
-            <select name = "theme" id = "theme">
-                <!-- Add custom themes here -->
-                <option value = "default" data-style = " background-color : white ; color : black ; text-decoration-color : black ">Default</option>
-                <option value = "shadow" data-style = " background-color : black ; color : white ; text-decoration-color : gray ">Shadow</option>
-                <option value = "romance" data-style = " background-color : #fde4e3 ; color : #f282b4 ; text-decoration-color : #ef415e ">Romance</option>
-                <option value = "beach" data-style = " background-color : #f9ece4 ; color : #21c4d3 ; text-decoration-color : #189aa7 ">Beach</option>
-            </select>
+            <div id = "theme-select" style = "display: inline">
+
+            </div>
         </form>
     </body>
 </html>

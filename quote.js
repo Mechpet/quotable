@@ -3,18 +3,14 @@
 function randomizeNumber(keyObj, ...args) {
     // keyObj values = number of quotes
     // args : empty
-    console.log("Object = ", keyObj);
     var index = Math.floor(Math.random() * Object.values(keyObj)[0]);
-    console.log("Index = ", index);
     getKeyValue("keys", selectQuote, index);
 }
 
 function selectQuote(keyObj, ...args) {
     // keyObj : keys
     // args[0] : index
-    console.log("keyoBJ OF SELECTQUOTE = ", keyObj);
     var key = Object.values(keyObj)[0][args[0]];
-    console.log("key = ", key);
     if (key) {
         getKeyValue(key, setQuote);
     }
@@ -22,7 +18,6 @@ function selectQuote(keyObj, ...args) {
 
 function setQuote(keyObj, ...args) {
     var quoteObj = Object.values(keyObj)[0];
-    console.log("quoteObj = ", quoteObj);
     $("title").html(quoteObj.quote);
     $("q").html(quoteObj.quote)
     var citationArr = citation(quoteObj.author, quoteObj.source);
@@ -51,11 +46,31 @@ function citation(author, source) {
 }
 
 function loadTheme(keyObj, ...args) {
-    console.log("Theme = ", Object.values(keyObj)[0]);
-    var string1 = Object.values(keyObj)[0]["style"].replace(/ /g, "\"");
+    // Random theme:
+    if (Object.values(keyObj)[0]["val"] == "random") {
+        $("div").load("./themes.html", randomizeTheme);
+    }
+    // Selected theme:
+    else {
+        getKeyValue(Object.keys(keyObj)[0], htmlStylize);
+    }
+}
+
+function htmlStylize(keyObj, ...args) {
+    // args[0] = data-style if forced style change
+    var dataStyle;
+    if (args[0]) {
+        dataStyle = args[0];
+    }
+    else if (!keyObj) {
+        console.log("Something failed with stylizing the quote tab.");
+    }
+    else {
+        dataStyle = Object.values(keyObj)[0]["style"];
+    }
+    var string1 = dataStyle.replace(/ /g, "\"");
     var string2 = string1.replace(/;/g, ",");
     var jsonString = `{${string2}}`;
-    console.log("string = ", jsonString);
     var themeObj = JSON.parse(jsonString);
     
     $("q").css("color", themeObj["color"]);
@@ -64,6 +79,16 @@ function loadTheme(keyObj, ...args) {
     $("*").css("transition", "all 0.5s");
 }
 
+function randomizeTheme() {
+    var themes = $("option");
+    // Index range : [1, last theme] because 0th theme is random
+    var index = Math.floor(Math.random() * (themes.length - 1)) + 1;
+    var randomTheme = themes[index];
+    var randomDataStyle = randomTheme.getAttribute("data-style");
+    htmlStylize(null, randomDataStyle);
+}
+
 $(function() {
+    // On new tab load, randomize the displayed quote (takes from the saved quote table)
     getKeyValue("number", randomizeNumber);
 })

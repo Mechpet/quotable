@@ -91,42 +91,18 @@ function loadQuotes(keyObj, ...args) {
     }
 }
 
-function formatState(state) {
-    if (!state.id) {
-        return state.text;
-    }
-
-    return $(
-        `<div style = "${$(state.element).data("style")}">${state.text}</div>`
-    );
-}
-
 // Run-time function
 $(function() {
     // Initialize number of quotes to 0 if the setting does not exist
     getKeyValue("number", setIfEmpty, "number", 0);
     getKeyValue("keys", setIfEmpty, "keys", []); 
-    console.log("1");
-    getKeyValue("theme", setIfEmpty, "theme", defaultTheme()); 
-    console.log("2");  
 
     // Initialize the appearance
     getKeyValue("keys", loadQuotes);
-    $(document).ready(function() {
-        // Load select2 for the select item
-        $("select").select2({
-            dropdownParent: $("form")[0],
-            templateResult: formatState
-        });
-    });
-    console.log("3");
-    getKeyValue("theme", loadOption);
-    console.log("4");
-
+    $("div#theme-select").load("./themes.html", readyThemes);
 
     // Attach event functions to the initial elements
     $("#adder").click(appendNewItem);
     $("#reseter").click(reset);
     $("li").click(removeItem);
-    $("select").change(setTheme);
 })

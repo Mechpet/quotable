@@ -1,17 +1,17 @@
 {
     "name": "Quotable",
     "description": "Bank of quotes.",
-    "version": "1.2",
+    "version": "1.3",
     "manifest_version": 3,
     "chrome_url_overrides": {
-        "newtab" : "quote.html"
+        "newtab" : "./quote.html"
     },
     "action": {
         "default_popup": "./popup.html"
     },
     "permissions": ["storage"],
     "content_scripts": [{
-        "js": ["jquery-3.5.1.js", "select2.min.js", "themes.js", "popup.js"],
+        "js": ["jquery-3.5.1.js", "select2.min.js", "themes.js", "popup.js", "quote.js"],
         "matches": ["<all_urls>"]
     }]
 }

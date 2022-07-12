@@ -3,3 +3,9 @@ q {
     word-wrap: break-word;
     white-space: pre-wrap;
 }
+
+div {
+    display: none;
+    position: absolute;
+    left: -999em;
+}
