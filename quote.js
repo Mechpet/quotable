@@ -28,7 +28,7 @@ function setQuote(keyObj, ...args) {
     var citationArr = citation(quoteObj.author, quoteObj.source);
     $("p").html(citationArr[0]);
     $("i").html(citationArr[1]);
-    getKeyValue("theme", setTheme);
+    getKeyValue("theme", loadTheme);
 }
 
 function citation(author, source) {
@@ -50,27 +50,17 @@ function citation(author, source) {
     return retArr;
 }
 
-function setTheme(keyObj, ...args) {
+function loadTheme(keyObj, ...args) {
     console.log("Theme = ", Object.values(keyObj)[0]);
-    switch (Object.values(keyObj)[0]) {
-        case "shadow":
-            $("q").css("color", "white");
-            $("p").css("color", "gray");
-            $("i").css("color", "gray");
-            $("html").css("background-color", "black");
-            break;
-        case "enlighten":
-            $("q").css("color", "lemonchiffon");
-            $("p").css("color", "cornsilk");
-            $("html").css("background-color", "navajowhite");
-            break;
-        default:
-            console.log("hi");
-            $("q").css("color", "black");
-            $("p").css("color", "black");
-            $("html").css("background-color", "white");
-            break;
-    }
+    var string1 = Object.values(keyObj)[0]["style"].replace(/ /g, "\"");
+    var string2 = string1.replace(/;/g, ",");
+    var jsonString = `{${string2}}`;
+    console.log("string = ", jsonString);
+    var themeObj = JSON.parse(jsonString);
+    
+    $("q").css("color", themeObj["color"]);
+    $("html").css("background-color", themeObj["background-color"]);
+    $("p, i").css("color", themeObj["text-decoration-color"]);
     $("*").css("transition", "all 0.5s");
 }
 

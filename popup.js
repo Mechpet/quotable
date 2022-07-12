@@ -91,18 +91,6 @@ function loadQuotes(keyObj, ...args) {
     }
 }
 
-function setTheme() {
-    let newTheme = this.value;
-    console.log("Set theme to ", newTheme);
-    setKeyValue("theme", newTheme);
-}
-
-function loadOption(keyObj, ...args) {
-    //$(`select option[value = ${Object.values(keyObj)[0]}`).prop("selected", true);
-    console.log("OPTION = ", Object.values(keyObj)[0]);
-    $("#theme").val(Object.values(keyObj)[0]).trigger("change.select2");
-}
-
 function formatState(state) {
     if (!state.id) {
         return state.text;
@@ -118,7 +106,9 @@ $(function() {
     // Initialize number of quotes to 0 if the setting does not exist
     getKeyValue("number", setIfEmpty, "number", 0);
     getKeyValue("keys", setIfEmpty, "keys", []); 
-    getKeyValue("theme", setIfEmpty, "theme", "default");   
+    console.log("1");
+    getKeyValue("theme", setIfEmpty, "theme", defaultTheme()); 
+    console.log("2");  
 
     // Initialize the appearance
     getKeyValue("keys", loadQuotes);
@@ -129,7 +119,9 @@ $(function() {
             templateResult: formatState
         });
     });
+    console.log("3");
     getKeyValue("theme", loadOption);
+    console.log("4");
 
 
     // Attach event functions to the initial elements
