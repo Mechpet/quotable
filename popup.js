@@ -102,7 +102,7 @@ $(function() {
     $("div#theme-select").load("./themes.html", readyThemes);
 
     // Attach event functions to the initial elements
-    $("#adder").click(appendNewItem);
-    $("#reseter").click(reset);
-    $("li").click(removeItem);
+    $("#adder").on("click", appendNewItem);
+    $("#reseter").on("click", reset);
+    $("li").on("click", removeItem);
 })

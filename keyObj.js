@@ -73,7 +73,9 @@ function delValue(keyObj, ...args) {
 
 /* Asynchronous method to delete all keyobjects from Chrome storage */
 function reset() {
-    chrome.storage.sync.clear(function() {
-        console.log("Cleared all keys.");
-    })
+    if (confirm("Are you sure you want to reset all data?") == true) {
+        chrome.storage.sync.clear(function() {
+            console.log("Cleared all keys.");
+        })
+    }
 }
