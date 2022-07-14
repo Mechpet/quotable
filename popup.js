@@ -17,7 +17,7 @@ function appendNewItem(event) {
     var ul = document.getElementsByTagName("ul")[0];
     ul.appendChild(li.firstChild);
     // Attach click event back to all list items
-    $("li").on("click", removeItem);
+    getKeyValue("locked", updateLi);
 }
 
 /* Appends a list item (based on keyobject) to the unordered list */
@@ -27,8 +27,6 @@ function appendItem(keyObj) {
 
     var ul = document.getElementsByTagName("ul")[0];
     ul.appendChild(li.firstChild);
-    // Attach click event back to all list items
-    $("li").on("click", removeItem);
 }
 
 /* Removes this list item permanently from the unordered list */
@@ -91,18 +89,58 @@ function loadQuotes(keyObj, ...args) {
     }
 }
 
+/* Sets the source of the image element based on whether the quote table is locked or not */
+function setLock(keyObj, ...args) {
+    if (Object.values(keyObj)[0]) {
+        $("img").attr("src", "locked.png");
+
+        $("#reseter").prop("disabled", "true");
+        $("#reseter").off("click");
+        $("li").off("click");
+    }
+    else {
+        $("img").attr("src", "unlocked.png");
+
+        $("#reseter").on("click", reset);
+        $("li").on("click", removeItem);
+    }
+}
+
+function updateLock() {
+    getKeyValue("locked", invertLock);
+}
+
+/* Sets the new value to not value */
+function invertLock(keyObj, ...args) {
+    // args : none
+    var newValue = !Object.values(keyObj)[0];
+    setKeyValue(Object.keys(keyObj)[0], newValue);
+    getKeyValue("locked", setLock);
+}
+
+function updateLi(keyObj, ...args) {
+    if (Object.values(keyObj)[0]) {
+        $("li")[-1].off("click");
+    }
+    else {
+        $("li")[-1].on("click", removeItem);
+    }
+}
+
 // Run-time function
 $(function() {
     // Initialize number of quotes to 0 if the setting does not exist
     getKeyValue("number", setIfEmpty, "number", 0);
     getKeyValue("keys", setIfEmpty, "keys", []); 
+    getKeyValue("locked", setIfEmpty, "locked", false);
 
     // Initialize the appearance
     getKeyValue("keys", loadQuotes);
+    getKeyValue("locked", updateLi);
+    getKeyValue("locked", setLock);
     $("div#theme-select").load("./themes.html", readyThemes);
 
     // Attach event functions to the initial elements
     $("#adder").on("click", appendNewItem);
-    $("#reseter").on("click", reset);
-    $("li").on("click", removeItem);
+    $("img").on("click", updateLock);
 })

@@ -13,7 +13,7 @@ function getKeyValue(keyName, callback, ...args) {
 function setIfEmpty(keyObj, ...args) {
     // args[0] : key name
     // args[1] : value
-    console.log("key obj = ", keyObj);
+    console.log("[sie]key obj = ", keyObj);
     if (Object.keys(keyObj).length === 0) {
         console.log("0");
         setKeyValue(args[0], args[1]);
