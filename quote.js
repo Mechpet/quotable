@@ -29,7 +29,7 @@ function setQuote(keyObj, ...args) {
 function citation(author, source) {
     var retArr = [];
     if (author) {
-        retArr.push(`- ${author},`);
+        retArr.push(`&#8212; ${author},`);
     }
     else {
         retArr.push("");
